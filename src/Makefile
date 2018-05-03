@@ -11,7 +11,7 @@ CXXFLAGS=$(IFLAGS) -g -O3 -Wall -std=c++11 -fPIC #-DDEBUG # -Wconversion
 
 # CUDA Flags
 CUXX=nvcc
-CUFLAGS=$(IFLAGS) -arch=sm_20 -Xcompiler -fPIC #-DDEBUG
+CUFLAGS=$(IFLAGS) -arch=sm_35 -Xcompiler -fPIC #-DDEBUG
 
 
 # POGS header files.
@@ -87,6 +87,9 @@ gpu: $(OBJDIR)/pogs_link.o $(GPU_OBJ) $(GPU_MTX_OBJ) $(GPU_PRJ_OBJ)
 	ar cr $(OBJDIR)/pogs.a $^
 
 shared: $(CPU_OBJ) $(CPU_MTX_OBJ) $(CPU_PRJ_OBJ)
+	$(CXX) -shared -Wl,-soname,pogs.so.1 -o $(OBJDIR)/pogs.so.1.0 $^
+
+sharedgpu: $(GPU_OBJ) $(GPU_MTX_OBJ) $(GPU_PRJ_OBJ)
 	$(CXX) -shared -Wl,-soname,pogs.so.1 -o $(OBJDIR)/pogs.so.1.0 $^
 
 # Directories
